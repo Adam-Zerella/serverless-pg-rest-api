@@ -1,0 +1,7 @@
+{
+  "verbose": false,
+  "watch": ["src/"],
+  "ignore": ["__tests__/", "node_modules/", ".git"],
+  "ext": ".ts",
+  "exec": "node --inspect --trace-deprecation --enable-source-maps -r ts-node/register -r dotenv/config src/server.ts"
+}

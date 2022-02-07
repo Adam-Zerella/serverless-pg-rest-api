@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+
+jobs:
+  build:
+    name: CI
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          cache: 'yarn'
+
+      - run: yarn install
+
+      - run: yarn typecheck
+
+      - run: yarn lint
+
+      - run: yarn build:js --diagnostics
+
+      - run: yarn test

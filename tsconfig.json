@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "target": "esnext",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "alwaysStrict": true,
+    "declaration": false,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "dist",
+    "removeComments": true,
+    "baseUrl": ".",
+    "paths": {
+      "@module*": ["src/modules*"],
+      "@route*": ["src/routes*"],
+      "@middleware*": ["src/middleware*"],
+      "@service*": ["src/services*"]
+    }
+  },
+  "exclude": ["node_modules/**/*", ".vscode/**/*"],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
+}

@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.idea/
+.esbuild/
+
+.DS_Store
+.env
+.env.prod
+yarn-error.log
