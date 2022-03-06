@@ -3,14 +3,14 @@ import { isEmpty } from 'ramda';
 import ApiError from '@module/error/lib';
 import db from '@module/db/lib';
 import { MAX_RECORD_LIMIT } from '@module/db/constants';
-import { calculateOffset, paginateData } from '@module/paginate/lib';
+import { calculateOffset, paginateData } from '@module/rest/paginate/lib';
 
-import type { AppContext } from '@module/koa/types';
 import type { TodoQuery } from './schemas';
+import type { APIGatewayProxyEvent } from 'aws-lambda';
 
-export async function list(ctx: AppContext, filters: TodoQuery) {
+export async function list(event: APIGatewayProxyEvent, filters: TodoQuery) {
   const { page, sort, is_enabled } = filters;
-  const { origin, path, query } = ctx;
+  const { headers = '', path } = event;
 
   const [{ count: totalRecords }] = await db('todo').count();
 
@@ -31,25 +31,12 @@ export async function list(ctx: AppContext, filters: TodoQuery) {
     .limit(MAX_RECORD_LIMIT)
     .offset(rangeOffset);
 
-  const paginatedResults = paginateData(
-    records,
-    Number(totalRecords),
-    page,
-    origin,
-    path,
-    query,
-  );
+  const paginatedResults = paginateData(records, Number(totalRecords), page, origin, path, filters);
 
   return paginatedResults;
 }
 
-export async function findOne(query: object) {
-  return await db('todo')
-    .where({ ...query })
-    .first();
-}
-
-export async function findOrThrow(todoId: string) {
+export async function findOneOrThrow(todoId: string) {
   const result = await db('todo').where({ id: todoId }).first();
 
   if (isEmpty(result)) {
@@ -58,12 +45,14 @@ export async function findOrThrow(todoId: string) {
   return result;
 }
 
+/** @TODO insertOneOrThrow */
 export async function insertOne(query: object) {
   return await db('todo')
     .insert({ ...query })
     .returning('*');
 }
 
+/** @TODO updateOneOrThrow */
 export async function updateOne(todoId: string, query: object) {
   return await db('todo')
     .update({ ...query })
@@ -71,6 +60,7 @@ export async function updateOne(todoId: string, query: object) {
     .returning('*');
 }
 
+/** @TODO deleteOneOrThrow */
 export async function deleteOne(todoId: string) {
   return await db('todo').where({ id: todoId }).delete().returning('*');
 }

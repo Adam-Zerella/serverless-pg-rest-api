@@ -7,24 +7,14 @@ export function calculateOffset(pageNumber: number) {
   return pageNumber * MAX_RECORD_LIMIT - MAX_RECORD_LIMIT;
 }
 
-export function calculateNextUrl(
-  pageNumber: number,
-  origin: string,
-  path: string,
-  query: object,
-) {
+export function calculateNextUrl(pageNumber: number, origin: string, path: string, query: object) {
   const queryParams = qs.stringify(omit(['page'], query));
   const nextPage = pageNumber + 1;
 
   return `${origin}${path}?${queryParams}&page=${nextPage}`;
 }
 
-export function calculatePrevUrl(
-  pageNumber: number,
-  origin: string,
-  path: string,
-  query: object,
-) {
+export function calculatePrevUrl(pageNumber: number, origin: string, path: string, query: object) {
   const queryParams = qs.stringify(omit(['page'], query));
   const nextPage = pageNumber - 1;
 

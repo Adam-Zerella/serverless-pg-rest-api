@@ -15,21 +15,9 @@ function getLogger(name: string) {
     base: undefined,
     enabled: !isTest,
     serializers: {
-      ctx: ({ state, header }: AppContext) => {
+      event: (event) => {
         return {
-          rquid: state.rquid,
-          agent: header['user-agent'],
-          // ...(state.user && {
-          //   user: {
-          //     ...state.user,
-          //     /** Can also redact with `pinoio` */
-          //     ...(state.user?.password && { password: '[REDACTED]' }),
-          //     ...(state.user?.token && { token: '[REDACTED]' }),
-          //     ...(state.user?.verification_token && {
-          //       verification_token: '[REDACTED]',
-          //     }),
-          //   },
-          // }),
+          event,
         };
       },
     },

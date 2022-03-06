@@ -2,7 +2,7 @@ import { Knex } from 'knex';
 
 import { TABLES } from '@module/db/constants';
 
-import type { Todo } from '@route/todo/types';
+import type { Todo } from 'src/handlers/todo/types';
 
 export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries

@@ -1,4 +1,4 @@
-import type { Todo, TodoHistory } from '@route/todo/types';
+import type { Todo, TodoHistory } from 'src/handlers/todo/types';
 
 export type TableName = 'todo' | 'todo_history';
 

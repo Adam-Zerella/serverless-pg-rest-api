@@ -13,7 +13,7 @@ jobs:
 
       - uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '16'
           cache: 'yarn'
 
       - run: yarn install
@@ -22,6 +22,6 @@ jobs:
 
       - run: yarn lint
 
-      - run: yarn build:js --diagnostics
+      - run: yarn build
 
       - run: yarn test

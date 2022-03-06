@@ -11,6 +11,11 @@ export default knex({
   connection: env.DB_URI,
   debug: env.NODE_ENV === 'production',
 
+  pool: {
+    max: 1,
+    min: 1,
+  },
+
   log: {
     debug(msg) {
       logger.debug(msg);

@@ -1,6 +1,6 @@
 # CONTANGO
 
-> Node.js REST API scaffold with sensible defaults and features. 🦴
+> Node.js REST API scaffold with sensible defaults and features for a FaaS environment. 🦴
 
 This RESTful API is built with [Koa](https://koajs.com/) as an alternative to Express.js along with Postgres as our DB.
 
@@ -28,6 +28,7 @@ A popular solution is to run an instance via [Docker](https://www.docker.com/)
 docker run \
     -e POSTGRES_PASSWORD=postgres \
     -e POSTGRES_DB=todos \
+    -e LANG='en_US.UTF-8' \
     -p 5432:5432 \
     -d postgres
 ```
@@ -50,6 +51,17 @@ To spin up a local instance of this API:
 yarn dev
 ```
 
+## Deployment 🚢
+
+This command will deploy obiding by your local `.env file, ensure this is configured for the
+environment you're deploying to.
+
+```sh
+yarn deploy \
+    --aws-profile az \
+    --stage prod
+```
+ 
 ## Documentation 📚
 
 TODO

@@ -1,11 +1,9 @@
-import qs from 'qs';
 import * as yup from 'yup';
 
 import log from '@module/log';
 import ApiError from '@module/error/lib';
 
-import type { AppContext } from '@module/koa/types';
-import type { Next } from 'koa';
+import type { APIGatewayProxyEvent } from 'aws-lambda';
 
 const logger = log.getLogger('ValidateMiddleware');
 
@@ -18,45 +16,30 @@ interface Schemas {
 /**
  * Validate the request paramaters, body or querystring
  */
-export default function (schemas: Schemas) {
-  return async function validationMiddleware(ctx: AppContext, next: Next) {
-    const { request, params = {} } = ctx;
-    const { querystring = '', body = null } = request;
+export async function awsValidate<TParam, TBody = null, TQuery = null>(
+  event: APIGatewayProxyEvent,
+  schemas: Schemas,
+): Promise<{ query: TQuery; body: TBody; param: TParam }> {
+  const { pathParameters, body: requestBody = null, queryStringParameters = '' } = event;
+  const { param: paramSchema = yup.object(), body: bodySchema, query: querySchema } = schemas;
 
-    const {
-      param: paramSchema = yup.object(),
-      body: bodySchema,
-      query: querySchema,
-    } = schemas;
+  try {
+    const validatedQuerystring = await querySchema.validate(queryStringParameters);
+    const validatedBody = await bodySchema.validate(requestBody);
+    const validatedParams = await paramSchema.validate(pathParameters);
 
-    try {
-      if (bodySchema) {
-        const validatedBody = await bodySchema.validate(body);
+    logger.debug({ event }, 'Validated request');
 
-        ctx.body = validatedBody;
-      }
+    return {
+      query: validatedQuerystring,
+      body: validatedBody,
+      param: validatedParams,
+    };
+  } catch (error) {
+    logger.debug({ event }, 'Failed to validate request');
 
-      if (querySchema) {
-        const parsedQuerystring = qs.parse(querystring);
-        const validatedQuerystring = await querySchema.validate(
-          parsedQuerystring,
-        );
-
-        ctx.state.query = validatedQuerystring;
-      }
-
-      const validatedParams = await paramSchema.validate(params);
-      ctx.params = validatedParams;
-
-      logger.debug({ ctx }, 'Validated request');
-
-      await next();
-    } catch (error) {
-      logger.debug({ ctx }, 'Failed to validate request');
-
-      if (error instanceof yup.ValidationError) {
-        throw new ApiError('BAD_DATA', error.message);
-      }
+    if (error instanceof yup.ValidationError) {
+      throw new ApiError('BAD_DATA', error.message);
     }
-  };
+  }
 }
