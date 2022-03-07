@@ -9,7 +9,7 @@ import type { TodoQuery } from './schemas';
 import type { APIGatewayProxyEvent } from 'aws-lambda';
 
 export async function list(event: APIGatewayProxyEvent, filters: TodoQuery) {
-  const { page, sort, is_enabled } = filters;
+  const { page, sort } = filters;
   const { headers = '', path } = event;
 
   const [{ count: totalRecords }] = await db('todo').count();

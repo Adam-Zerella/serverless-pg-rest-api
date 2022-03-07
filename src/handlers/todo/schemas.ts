@@ -15,7 +15,8 @@ export const findAll = {
       .default(null)
       .oneOf([...SORT_DIRECTION, null]),
   }),
-  param: yup.object(),
+  param: yup.object().nullable(),
+  body: yup.object().nullable(),
 };
 
 export const findById = {
