@@ -1,44 +1,42 @@
 import type { AWS } from '@serverless/typescript';
 
 export const dbResources: AWS['resources']['Resources'] = {
-  RDSInstanceRotationSecret: {
+  RDSClusterRotationalSecrets: {
     Type: 'AWS::SecretsManager::Secret',
     Properties: {
+      // Name: '${self:service}-${self:stage}-RDSClusterSecretPassword',
       Description: 'RDS database auto-generated credentials',
       GenerateSecretString: {
-        PasswordLength: 30,
-        SecretStringTemplate: '{ "username": "postgres" }',
         GenerateStringKey: 'password',
-        ExcludeCharacters: `'"@/\\'`,
+        SecretStringTemplate: {
+          'Fn::Sub': '{"password": "abc", "username": "postgres"}',
+        },
+        PasswordLength: 24,
+        ExcludeCharacters: `'"@/\\|'`,
       },
     },
   },
 
-  RDSInstance: {
-    Type: 'AWS::RDS::DBInstance',
+  RDSCluster: {
+    Type: 'AWS::RDS::DBCluster',
     Properties: {
-      Engine: 'postgres',
-      EngineVersion: '14.1',
+      Engine: 'aurora-postgresql',
+      EngineVersion: '10.14',
+      EngineMode: 'serverless',
       MasterUsername: {
-        'Fn::Sub': '{{resolve:secretsmanager:${RDSInstanceRotationSecret}::username}}',
+        'Fn::Sub': '{{resolve:secretsmanager:${RDSClusterRotationalSecrets}::username}}',
       },
       MasterUserPassword: {
-        'Fn::Sub': '{{resolve:secretsmanager:${RDSInstanceRotationSecret}::password}}',
+        'Fn::Sub': '{{resolve:secretsmanager:${RDSClusterRotationalSecrets}::password}}',
       },
-      EnablePerformanceInsights: false,
-      MultiAZ: false,
-      PubliclyAccessible: false,
-      StorageEncrypted: true,
-      AllocatedStorage: '20', // 20GB
-      DBInstanceClass: 'db.t4g.medium',
-      BackupRetentionPeriod: 0,
+      DatabaseName: '${self:service}',
+      ScalingConfiguration: {
+        AutoPause: true,
+        MinCapacity: 2, // '2C | 4GB'
+        MaxCapacity: 4,
+        SecondsUntilAutoPause: 360,
+      },
+      EnableHttpEndpoint: true, // Enables the Data API for (query editor - no cost)
     },
-  },
-};
-
-export const dbOutputs: AWS['outputs'] = {
-  DBClusterEndpoint: {
-    Description: 'Aurora DB Cluster Endpoint Address',
-    Value: `!GetAtt AuroraCluster.Endpoint.Address`,
   },
 };

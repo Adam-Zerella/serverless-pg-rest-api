@@ -1,4 +1,4 @@
-import { dbResources, dbOutputs } from './src/modules/db/serverless';
+import { dbResources } from './src/modules/db/serverless';
 import { todoHandlers } from './src/handlers/todo/serverless';
 
 import type { AWS } from '@serverless/typescript';
@@ -15,9 +15,9 @@ const serverlessConfiguration: AWS = {
       minify: isProd,
       sourcemap: !isProd,
       exclude: ['aws-sdk'],
-      external: ['pg'],
+      external: ['knex', 'pg'],
       target: 'node14',
-      //   define: { 'require.resolve': undefined },
+      // define: { 'require.resolve': undefined },
       platform: 'node',
     },
 
@@ -46,23 +46,43 @@ const serverlessConfiguration: AWS = {
     runtime: 'nodejs14.x',
     region: 'ap-southeast-2', // Sydney
     role: 'arn:aws:iam::453470842717:role/IamRoleLambdaExecution',
+    logRetentionInDays: 14,
+    timeout: 30,
+    lambdaHashingVersion: '20201221',
+
     apiGateway: {
-      minimumCompressionSize: 1024,
+      minimumCompressionSize: 128,
       shouldStartNameWithService: true,
     },
 
     environment: {
-      AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-      // NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
+      ...(isProd && { NODE_ENV: 'production' }),
+      DB_URI: {
+        'Fn::Sub': [
+          'postgres://${DBUser}:${DBPass}@${DBHost}:5432/${DBName}',
+          {
+            DBUser: {
+              'Fn::Sub': '{{resolve:secretsmanager:${RDSClusterRotationalSecrets}::username}}',
+            },
+            DBPass: {
+              'Fn::Sub': '{{resolve:secretsmanager:${RDSClusterRotationalSecrets}::password}}',
+            },
+            DBHost: {
+              'Fn::GetAtt': ['RDSCluster', 'Endpoint.Address'],
+            },
+            DBName: '${self:service}',
+          },
+        ],
+      },
       // STAGE: '${sls:stage}',
+      // AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      // NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
     },
 
-    lambdaHashingVersion: '20201221',
     deploymentBucket: {
+      /** @TODO Trim stage here */
       name: 'sls-deployment-${self:service}-${sls:stage}',
     },
-
-    logRetentionInDays: 14,
   },
 
   resources: {
@@ -73,10 +93,6 @@ const serverlessConfiguration: AWS = {
 
   functions: {
     ...todoHandlers,
-  },
-
-  outputs: {
-    ...dbOutputs,
   },
 };
 
