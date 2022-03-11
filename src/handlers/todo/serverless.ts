@@ -7,7 +7,14 @@ export const todoHandlers: AWS['functions'] = {
     architecture: 'arm64',
     events: [
       {
-        httpApi: 'GET /todo',
+        http: {
+          cors: {
+            origin: process.env.CORS_ORIGIN,
+          },
+          // async: true,
+          method: 'GET',
+          path: '/todo',
+        },
       },
     ],
   },
@@ -18,7 +25,13 @@ export const todoHandlers: AWS['functions'] = {
     architecture: 'arm64',
     events: [
       {
-        httpApi: 'GET /todo/{todoId}',
+        http: {
+          cors: {
+            origin: process.env.CORS_ORIGIN,
+          },
+          method: 'GET',
+          path: '/todo/{todoId}',
+        },
       },
     ],
   },
@@ -29,7 +42,13 @@ export const todoHandlers: AWS['functions'] = {
     architecture: 'arm64',
     events: [
       {
-        httpApi: 'PUT /todo/{todoId}',
+        http: {
+          cors: {
+            origin: process.env.CORS_ORIGIN,
+          },
+          method: 'PUT',
+          path: '/todo/{todoId}',
+        },
       },
     ],
   },
@@ -40,7 +59,13 @@ export const todoHandlers: AWS['functions'] = {
     architecture: 'arm64',
     events: [
       {
-        httpApi: 'POST /todo',
+        http: {
+          cors: {
+            origin: process.env.CORS_ORIGIN,
+          },
+          method: 'POST',
+          path: '/todo',
+        },
       },
     ],
   },
@@ -51,7 +76,13 @@ export const todoHandlers: AWS['functions'] = {
     architecture: 'arm64',
     events: [
       {
-        httpApi: 'DELETE /todo',
+        http: {
+          cors: {
+            origin: process.env.CORS_ORIGIN,
+          },
+          method: 'DELETE',
+          path: '/todo/{todoId}',
+        },
       },
     ],
   },

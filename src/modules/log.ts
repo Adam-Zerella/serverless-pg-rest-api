@@ -2,9 +2,7 @@ import { pino } from 'pino';
 
 import env from '@module/env';
 
-// import type { AppContext } from '@module/koa/types';
-
-const isProd = env.NODE_ENV === 'production';
+// const isProd = env.NODE_ENV === 'production';
 const isTest = env.NODE_ENV === 'test';
 
 function getLogger(name: string) {
@@ -15,9 +13,9 @@ function getLogger(name: string) {
     base: undefined,
     enabled: !isTest,
     serializers: {
-      event: (event) => ({
-        ['user-agent']: event.userAgent,
-        rquid: event.requestId,
+      awsEvent: (awsEvent) => ({
+        ['user-agent']: awsEvent.userAgent,
+        rquid: awsEvent.requestId,
       }),
     },
     // ...(!isProd &&

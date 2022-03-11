@@ -22,13 +22,11 @@
     "contango",
     "functional",
     "scaffold",
-    "template",
     "framework",
-    "nodejs",
     "serverless"
   ],
   "engines": {
-    "node": "~14"
+    "node": "~16"
   },
   "author": "Adam Zerella <hi@azerel.la> (https://azerel.la)",
   "license": "MIT",
