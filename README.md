@@ -1,16 +1,16 @@
-# CONTANGO
+# CONTANGO SERVERLESS
 
 > Node.js REST API scaffold with sensible defaults and features for a FaaS environment. 🦴
 
-This RESTful API is built with [Koa](https://koajs.com/) as an alternative to Express.js along with Postgres as our DB.
+This RESTful API is built with the [Serverless framework](https://www.serverless.com/) along with Aurora Serverless [Postgres](https://www.postgresql.org/) as our DB.
 
 ## Usage 📖
 
-The REST API endpoints rely on generated documentation, [see here for a preview](#).
+Getting started with this repo...
 
 ## Local development
 
-This app relies on [Nodemon](https://nodemon.io/) for local development hot-reloading and debugging.
+This app relies on the [Serverless framework](https://www.serverless.com/) for local development, hot-reloading and debugging.
 
 ### Getting started 🌱
 
@@ -53,15 +53,14 @@ yarn dev
 
 ## Deployment 🚢
 
-This command will deploy obiding by your local `.env file, ensure this is configured for the
+This command will deploy obiding by your local `.env` file, ensure this is configured for the
 environment you're deploying to.
 
 ```sh
 yarn deploy \
-    --aws-profile az \
     --stage prod
 ```
  
 ## Documentation 📚
 
-TODO
+TODO: Grab and render from API gateway

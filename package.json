@@ -10,7 +10,7 @@
     "lint:fix": "eslint src/ --fix",
     "typecheck": "tsc --noEmit",
     "build": "run-s build:*",
-    "build:clean": "rimraf dist/",
+    "build:clean": "rimraf dist/ .serverless/",
     "build:sls": "serverless package",
     "db": "run-s db:*",
     "db:rollback": "knex migrate:rollback --all",
@@ -30,6 +30,13 @@
   },
   "author": "Adam Zerella <hi@azerel.la> (https://azerel.la)",
   "license": "MIT",
+  "dependencies": {
+    "knex": "^0.95.11",
+    "pg": "^8.7.1",
+    "pino": "^7.0.2",
+    "ramda": "^0.28.0",
+    "yup": "^0.32.11"
+  },
   "devDependencies": {
     "@serverless/typescript": "^3.0.0",
     "@types/aws-lambda": "^8.10.92",
@@ -62,12 +69,5 @@
     "ts-node": "^10.3.0",
     "tsconfig-paths": "^3.12.0",
     "typescript": "^4.4.4"
-  },
-  "dependencies": {
-    "knex": "^0.95.11",
-    "pg": "^8.7.1",
-    "pino": "^7.0.2",
-    "ramda": "^0.28.0",
-    "yup": "^0.32.11"
   }
 }
