@@ -2,7 +2,6 @@ import type { TableKey } from './types';
 
 export const TABLES: TableKey = {
   TODO: 'todo',
-  TODO_HISTORY: 'todo_history',
 };
 
 export const MAX_RECORD_LIMIT = 50;

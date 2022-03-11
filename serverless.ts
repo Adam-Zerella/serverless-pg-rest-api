@@ -26,19 +26,22 @@ const serverlessConfiguration: AWS = {
       lambdaPort: 3004,
     },
 
-    // customDomain: {
-    //   domainName: '${self:service}.${sls:stage}.azerel.la',
-    //   certificateName: '*.${sls:stage}.azerel.la',
-    //   createRoute53Record: true,
-    // },
+    customDomain: {
+      domainName: '${self:service}-${sls:stage}.azerel.la',
+      // stage: '${sls:stage}',
+      certificateName: '*.azerel.la',
+      apiType: 'http',
+      createRoute53Record: true,
+      endpointType: 'regional',
+    },
   },
 
   plugins: [
     'serverless-dotenv-plugin',
     'serverless-esbuild',
     'serverless-offline',
+    'serverless-domain-manager',
     // 'serverless-secrets',
-    // 'serverless-domain-manager',
   ],
 
   provider: {
@@ -49,9 +52,10 @@ const serverlessConfiguration: AWS = {
     logRetentionInDays: 14,
     timeout: 30,
     lambdaHashingVersion: '20201221',
+    memorySize: 128,
 
     apiGateway: {
-      minimumCompressionSize: 128,
+      minimumCompressionSize: 1024,
       shouldStartNameWithService: true,
     },
 
@@ -82,6 +86,11 @@ const serverlessConfiguration: AWS = {
     deploymentBucket: {
       /** @TODO Trim stage here */
       name: 'sls-deployment-${self:service}-${sls:stage}',
+    },
+
+    vpc: {
+      securityGroupIds: ['sg-6243e91b'],
+      subnetIds: ['subnet-bf6397e7', 'subnet-dbbadf92', 'subnet-263f5441'],
     },
   },
 

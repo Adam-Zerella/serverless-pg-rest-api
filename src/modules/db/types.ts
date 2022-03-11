@@ -1,6 +1,6 @@
-import type { Todo, TodoHistory } from 'src/handlers/todo/types';
+import type { Todo } from 'src/handlers/todo/types';
 
-export type TableName = 'todo' | 'todo_history';
+export type TableName = 'todo';
 
 export type TableKey = {
   [K in Uppercase<TableName>]: TableName;
@@ -9,6 +9,5 @@ export type TableKey = {
 declare module 'knex/types/tables' {
   interface Tables {
     todo: Todo;
-    todo_history: TodoHistory;
   }
 }

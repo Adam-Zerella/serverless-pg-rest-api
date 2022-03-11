@@ -16,7 +16,7 @@ interface Schemas {
 /**
  * Validate the request paramaters, body or querystring
  */
-export async function awsValidate<TParam, TBody = null, TQuery = null>(
+export async function awsValidate<TParam, TBody, TQuery>(
   event: APIGatewayProxyEvent,
   schemas: Schemas,
 ): Promise<{ query: TQuery; body: TBody; param: TParam }> {

@@ -10,5 +10,5 @@ export default {
   migrations: {
     tableName: 'migrations',
   },
-  acquireConnectionTimeout: 10000, // 10 seconds
+  acquireConnectionTimeout: 20000, // 20 seconds
 } as Knex.Config;

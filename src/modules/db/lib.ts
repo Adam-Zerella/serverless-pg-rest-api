@@ -14,6 +14,7 @@ export default knex({
   pool: {
     max: 1,
     min: 1,
+    // destroyTimeoutMillis: 60000,
   },
 
   log: {

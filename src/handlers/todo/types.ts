@@ -5,8 +5,3 @@ export interface Todo {
   created_at: string;
   deleted_at: string;
 }
-
-export interface TodoHistory {
-  created_at: string;
-  deleted_at: string;
-}

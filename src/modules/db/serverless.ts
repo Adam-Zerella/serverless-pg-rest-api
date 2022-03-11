@@ -4,7 +4,7 @@ export const dbResources: AWS['resources']['Resources'] = {
   RDSClusterRotationalSecrets: {
     Type: 'AWS::SecretsManager::Secret',
     Properties: {
-      // Name: '${self:service}-${self:stage}-RDSClusterSecretPassword',
+      Name: '${self:service}-${sls:stage}-rdscluster',
       Description: 'RDS database auto-generated credentials',
       GenerateSecretString: {
         GenerateStringKey: 'password',
@@ -12,7 +12,7 @@ export const dbResources: AWS['resources']['Resources'] = {
           'Fn::Sub': '{"password": "abc", "username": "postgres"}',
         },
         PasswordLength: 24,
-        ExcludeCharacters: `'"@/\\|'`,
+        ExcludeCharacters: `'"@/\\|,:!\`^~<>`,
       },
     },
   },
@@ -34,9 +34,9 @@ export const dbResources: AWS['resources']['Resources'] = {
         AutoPause: true,
         MinCapacity: 2, // '2C | 4GB'
         MaxCapacity: 4,
-        SecondsUntilAutoPause: 360,
+        SecondsUntilAutoPause: 300, // 5 Minutes until scale down
       },
-      EnableHttpEndpoint: true, // Enables the Data API for (query editor - no cost)
+      VpcSecurityGroupIds: ['sg-0ac8e5494322c6a28'], // RDS open
     },
   },
 };

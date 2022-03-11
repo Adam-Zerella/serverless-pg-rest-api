@@ -10,12 +10,12 @@ import type { TodoBody, TodoParam, TodoQuery } from './schemas';
 
 const logger = log.getLogger('TodoHandler');
 
-export async function findAll(event: APIGatewayProxyEvent) {
-  const { query } = await validate<null, null, TodoQuery>(event, todoSchemas.findAll);
+export async function findAll(awsEvent: APIGatewayProxyEvent) {
+  const { query } = await validate<null, null, TodoQuery>(awsEvent, todoSchemas.findAll);
 
-  logger.info({ event }, `Searching records`);
+  logger.info({ awsEvent }, `Searching records`);
 
-  const { data, meta } = await list(event, query);
+  const { data, meta } = await list(awsEvent, query);
 
   return {
     data,
@@ -23,11 +23,11 @@ export async function findAll(event: APIGatewayProxyEvent) {
   };
 }
 
-export async function findById(event: APIGatewayProxyEvent) {
-  const { param } = await validate<TodoParam>(event, todoSchemas.findById);
+export async function findById(awsEvent: APIGatewayProxyEvent) {
+  const { param } = await validate<TodoParam>(awsEvent, todoSchemas.findById);
   const { todoId } = param;
 
-  logger.info({ event }, `Finding record with ID '${todoId}'`);
+  logger.info({ awsEvent }, `Finding record with ID '${todoId}'`);
 
   const result = await findOneOrThrow(todoId);
 
@@ -36,27 +36,27 @@ export async function findById(event: APIGatewayProxyEvent) {
   };
 }
 
-export async function create(event: APIGatewayProxyEvent) {
-  const { body } = await validate<null, TodoBody>(event, todoSchemas.create);
+export async function create(awsEvent: APIGatewayProxyEvent) {
+  const { body } = await validate<null, TodoBody>(awsEvent, todoSchemas.create);
 
   const [result] = await insertOne({
     ...body,
   });
 
-  logger.info({ event }, `Created record with ID '${result.id}'`);
+  logger.info({ awsEvent }, `Created record with ID '${result.id}'`);
 
   return {
     data: result,
   };
 }
 
-export async function update(event: APIGatewayProxyEvent) {
-  const { param, body } = await validate<TodoParam, TodoBody>(event, todoSchemas.update);
+export async function update(awsEvent: APIGatewayProxyEvent) {
+  const { param, body } = await validate<TodoParam, TodoBody>(awsEvent, todoSchemas.update);
   const { todoId } = param;
 
   await findOneOrThrow(todoId);
 
-  logger.info({ event }, `Updating record with ID '${todoId}'`);
+  logger.info({ awsEvent }, `Updating record with ID '${todoId}'`);
 
   const [updated] = await updateOne(todoId, {
     ...body,
@@ -67,13 +67,13 @@ export async function update(event: APIGatewayProxyEvent) {
   };
 }
 
-export async function remove(event: APIGatewayProxyEvent) {
-  const { param } = await validate<TodoParam>(event, todoSchemas.remove);
+export async function remove(awsEvent: APIGatewayProxyEvent) {
+  const { param } = await validate<TodoParam>(awsEvent, todoSchemas.remove);
   const { todoId } = param;
 
   await findOneOrThrow(todoId);
 
-  logger.info({ event }, `Deleting record with ID '${todoId}'`);
+  logger.info({ awsEvent }, `Deleting record with ID '${todoId}'`);
 
   const [deleted] = await deleteOne(todoId);
 

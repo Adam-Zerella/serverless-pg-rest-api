@@ -7,7 +7,6 @@ import type { Todo } from 'src/handlers/todo/types';
 export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries
   await knex(TABLES.TODO).del();
-  await knex(TABLES.TODO_HISTORY).del();
 
   /**
    *

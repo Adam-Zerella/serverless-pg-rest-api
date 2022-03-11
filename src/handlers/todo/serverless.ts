@@ -5,7 +5,6 @@ export const todoHandlers: AWS['functions'] = {
     handler: `src/handlers/todo/handlers.findAll`,
     description: 'List todos',
     architecture: 'arm64',
-    disableLogs: true,
     events: [
       {
         httpApi: 'GET /todo',
@@ -17,7 +16,6 @@ export const todoHandlers: AWS['functions'] = {
     handler: `src/handlers/todo/handlers.findById`,
     description: 'Find todo by ID',
     architecture: 'arm64',
-    disableLogs: true,
     events: [
       {
         httpApi: 'GET /todo/{todoId}',
@@ -29,7 +27,6 @@ export const todoHandlers: AWS['functions'] = {
     handler: `src/handlers/todo/handlers.update`,
     description: 'Update todo',
     architecture: 'arm64',
-    disableLogs: true,
     events: [
       {
         httpApi: 'PUT /todo/{todoId}',
@@ -41,7 +38,6 @@ export const todoHandlers: AWS['functions'] = {
     handler: `src/handlers/todo/handlers.create`,
     description: 'Create todo',
     architecture: 'arm64',
-    disableLogs: true,
     events: [
       {
         httpApi: 'POST /todo',
@@ -53,7 +49,6 @@ export const todoHandlers: AWS['functions'] = {
     handler: `src/handlers/todo/handlers.delete`,
     description: 'Delete todo',
     architecture: 'arm64',
-    disableLogs: true,
     events: [
       {
         httpApi: 'DELETE /todo',

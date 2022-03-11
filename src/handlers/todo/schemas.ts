@@ -1,48 +1,44 @@
-import * as yup from 'yup';
+import { object, string, number, InferType } from 'yup';
 
 import { SORT_DIRECTION } from '@module/db/constants';
 
-export type TodoParam = yup.InferType<typeof findById['param']>;
-export type TodoBody = yup.InferType<typeof create['body']>;
-export type TodoQuery = yup.InferType<typeof findAll['query']>;
+export type TodoParam = InferType<typeof findById['param']>;
+export type TodoBody = InferType<typeof create['body']>;
+export type TodoQuery = InferType<typeof findAll['query']>;
 
 export const findAll = {
-  query: yup.object().shape({
-    page: yup.number().min(1).default(1).max(99),
-    sort: yup
-      .string()
+  query: object().shape({
+    page: number().min(1).default(1).max(99),
+    sort: string()
       .nullable()
       .default(null)
       .oneOf([...SORT_DIRECTION, null]),
   }),
-  param: yup.object().nullable(),
-  body: yup.object().nullable(),
 };
 
 export const findById = {
-  param: yup.object().shape({
-    todoId: yup.string().uuid().required(),
+  param: object().shape({
+    todoId: string().uuid().required(),
   }),
 };
 
 export const create = {
-  param: yup.object(),
-  body: yup.object().shape({
-    label: yup.string().required(),
+  body: object().shape({
+    label: string().required(),
   }),
 };
 
 export const update = {
-  param: yup.object().shape({
-    todoId: yup.string().uuid().required(),
+  param: object().shape({
+    todoId: string().uuid().required(),
   }),
-  body: yup.object().shape({
-    label: yup.string(),
+  body: object().shape({
+    label: string(),
   }),
 };
 
 export const remove = {
-  param: yup.object().shape({
-    todoId: yup.string().uuid().required(),
+  param: object().shape({
+    todoId: string().uuid().required(),
   }),
 };
