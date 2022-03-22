@@ -8,9 +8,7 @@ export const todoHandlers: AWS['functions'] = {
     events: [
       {
         http: {
-          cors: {
-            origin: process.env.CORS_ORIGIN,
-          },
+          cors: true,
           // async: true,
           method: 'GET',
           path: '/todo',
@@ -26,9 +24,7 @@ export const todoHandlers: AWS['functions'] = {
     events: [
       {
         http: {
-          cors: {
-            origin: process.env.CORS_ORIGIN,
-          },
+          cors: true,
           method: 'GET',
           path: '/todo/{todoId}',
         },
@@ -43,9 +39,7 @@ export const todoHandlers: AWS['functions'] = {
     events: [
       {
         http: {
-          cors: {
-            origin: process.env.CORS_ORIGIN,
-          },
+          cors: true,
           method: 'PUT',
           path: '/todo/{todoId}',
         },
@@ -60,9 +54,7 @@ export const todoHandlers: AWS['functions'] = {
     events: [
       {
         http: {
-          cors: {
-            origin: process.env.CORS_ORIGIN,
-          },
+          cors: true,
           method: 'POST',
           path: '/todo',
         },
@@ -77,9 +69,7 @@ export const todoHandlers: AWS['functions'] = {
     events: [
       {
         http: {
-          cors: {
-            origin: process.env.CORS_ORIGIN,
-          },
+          cors: true,
           method: 'DELETE',
           path: '/todo/{todoId}',
         },

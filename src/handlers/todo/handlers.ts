@@ -2,7 +2,7 @@ import { isEmpty } from 'ramda';
 
 import log from '@module/log';
 import { awsValidate as validate } from '@middleware/validate';
-import { jsonResponse } from '@middleware/json';
+import { json } from '@middleware/json';
 import { handler } from '@middleware/handler';
 
 import {
@@ -12,7 +12,7 @@ import {
   deleteOneOrThrow,
   findOneOrThrow,
 } from './persistence';
-import * as todoSchemas from './schemas';
+import { findAllSchema, findByIdSchema, createSchema, updateSchema, removeSchema } from './schemas';
 
 import type { APIGatewayProxyEvent } from 'aws-lambda';
 import type { TodoBody, TodoParam, TodoQuery } from './schemas';
@@ -21,68 +21,66 @@ const logger = log.getLogger('TodoHandler');
 
 export async function findAll(awsEvent: APIGatewayProxyEvent) {
   return handler(async () => {
-    const { query } = await validate<null, null, TodoQuery>(awsEvent, todoSchemas.findAll);
+    const { query } = await validate<null, null, TodoQuery>(awsEvent, findAllSchema);
 
     logger.info({ ctx: awsEvent }, `Searching records`);
 
     const { data, meta } = await list(awsEvent, query);
-    return jsonResponse({ data, meta });
+    return json({ data, meta });
   });
 }
 
 export async function findById(awsEvent: APIGatewayProxyEvent) {
   return handler(async () => {
-    const { param } = await validate<TodoParam>(awsEvent, todoSchemas.findById);
+    const { param } = await validate<TodoParam>(awsEvent, findByIdSchema);
     const { todoId } = param;
 
     logger.info({ ctx: awsEvent }, `Finding record with ID '${todoId}'`);
 
     const result = await findOneOrThrow(todoId);
     if (isEmpty(result)) {
-      return jsonResponse({ data: null }, 404);
+      return json({ data: null }, 404);
     }
 
-    return jsonResponse({ data: result });
+    return json({ data: result });
   });
 }
 
 export async function create(awsEvent: APIGatewayProxyEvent) {
   return handler(async () => {
-    const { body } = await validate<null, TodoBody>(awsEvent, todoSchemas.create);
+    const { body } = await validate<null, TodoBody>(awsEvent, createSchema);
 
-    const [result] = await insertOneOrThrow({
+    const [result] = await insertOneOrThrow<TodoBody>({
       ...body,
     });
 
     logger.info({ ctx: awsEvent }, `Created record with ID '${result.id}'`);
 
-    return jsonResponse({ data: result });
+    return json({ data: result });
   });
 }
 
 export async function update(awsEvent: APIGatewayProxyEvent) {
   return handler(async () => {
-    const { param, body } = await validate<TodoParam, TodoBody>(awsEvent, todoSchemas.update);
+    const { param, body } = await validate<TodoParam, TodoBody>(awsEvent, updateSchema);
     const { todoId } = param;
 
     const record = await findOneOrThrow(todoId);
     if (isEmpty(record)) {
-      return jsonResponse({ data: null }, 404);
+      return json({ data: null }, 404);
     }
 
     logger.info({ ctx: awsEvent }, `Updating record with ID '${todoId}'`);
 
-    const [result] = await updateOneOrThrow(todoId, {
-      ...body,
-    });
+    const [result] = await updateOneOrThrow<TodoBody>(todoId, body);
 
-    return jsonResponse({ data: result });
+    return json({ data: result });
   });
 }
 
 export async function remove(awsEvent: APIGatewayProxyEvent) {
   return handler(async () => {
-    const { param } = await validate<TodoParam>(awsEvent, todoSchemas.remove);
+    const { param } = await validate<TodoParam>(awsEvent, removeSchema);
     const { todoId } = param;
 
     await findOneOrThrow(todoId);
@@ -91,6 +89,6 @@ export async function remove(awsEvent: APIGatewayProxyEvent) {
 
     const [result] = await deleteOneOrThrow(todoId);
 
-    return jsonResponse({ data: result });
+    return json({ data: result });
   });
 }

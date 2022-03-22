@@ -2,11 +2,11 @@ import { object, string, number, InferType } from 'yup';
 
 import { SORT_DIRECTION } from '@module/db/constants';
 
-export type TodoParam = InferType<typeof findById['param']>;
-export type TodoBody = InferType<typeof create['body']>;
-export type TodoQuery = InferType<typeof findAll['query']>;
+export type TodoParam = InferType<typeof findByIdSchema['param']>;
+export type TodoBody = InferType<typeof createSchema['body']>;
+export type TodoQuery = InferType<typeof findAllSchema['query']>;
 
-export const findAll = {
+export const findAllSchema = {
   query: object({
     page: number().min(1).default(1).max(99),
     sort: string()
@@ -16,19 +16,19 @@ export const findAll = {
   }),
 };
 
-export const findById = {
+export const findByIdSchema = {
   param: object({
     todoId: string().uuid().required(),
   }),
 };
 
-export const create = {
+export const createSchema = {
   body: object({
     label: string().required(),
   }),
 };
 
-export const update = {
+export const updateSchema = {
   param: object({
     todoId: string().uuid().required(),
   }),
@@ -37,7 +37,7 @@ export const update = {
   }),
 };
 
-export const remove = {
+export const removeSchema = {
   param: object({
     todoId: string().uuid().required(),
   }),
