@@ -1,5 +1,3 @@
-import { isEmpty } from 'ramda';
-
 import ApiError from '@module/error/lib';
 import db from '@module/db/lib';
 import { MAX_RECORD_LIMIT } from '@module/db/constants';
@@ -9,58 +7,72 @@ import type { TodoQuery } from './schemas';
 import type { APIGatewayProxyEvent } from 'aws-lambda';
 
 export async function list(event: APIGatewayProxyEvent, filters: TodoQuery) {
-  const { page, sort } = filters;
-  const { headers = '', path } = event;
+  try {
+    const { page, sort } = filters;
+    const { path, headers } = event;
+    const origin = headers['Origin'];
 
-  const [{ count: totalRecords }] = await db('todo').count();
+    const [{ count: totalRecords }] = await db('todo').count();
 
-  const rangeOffset = calculateOffset(page);
+    const rangeOffset = calculateOffset(page);
 
-  const records = await db('todo')
-    .modify(function (queryBuilder) {
-      if (sort !== null) {
-        queryBuilder.orderBy('todo.id', sort);
-      }
-    })
-    .modify(function (queryBuilder) {
-      if (is_enabled !== null)
-        queryBuilder.andWhere({
-          'todo.is_blacklisted': is_enabled,
-        });
-    })
-    .limit(MAX_RECORD_LIMIT)
-    .offset(rangeOffset);
+    const records = await db('todo')
+      .modify(function (queryBuilder) {
+        if (sort !== null) {
+          queryBuilder.orderBy('todo.id', sort);
+        }
+      })
+      .limit(MAX_RECORD_LIMIT)
+      .offset(rangeOffset);
 
-  const paginatedResults = paginateData(records, Number(totalRecords), page, origin, path, filters);
+    const paginatedResults = paginateData(
+      records,
+      Number(totalRecords),
+      page,
+      origin,
+      path,
+      filters,
+    );
 
-  return paginatedResults;
+    return paginatedResults;
+  } catch (err) {
+    throw new ApiError('Failed to list records', 500);
+  }
 }
 
 export async function findOneOrThrow(todoId: string) {
-  const result = await db('todo').where({ id: todoId }).first();
-
-  if (isEmpty(result)) {
-    throw new ApiError('NO_RESOURCE', 'Record does not exist');
+  try {
+    return await db('todo').where({ id: todoId }).first();
+  } catch (err) {
+    throw new ApiError('Failed to find record', 500);
   }
-  return result;
 }
 
-/** @TODO insertOneOrThrow */
-export async function insertOne(query: object) {
-  return await db('todo')
-    .insert({ ...query })
-    .returning('*');
+export async function insertOneOrThrow(query: object) {
+  try {
+    return await db('todo')
+      .insert({ ...query })
+      .returning('*');
+  } catch (err) {
+    throw new ApiError('Failed to insert record', 500);
+  }
 }
 
-/** @TODO updateOneOrThrow */
-export async function updateOne(todoId: string, query: object) {
-  return await db('todo')
-    .update({ ...query })
-    .where({ id: todoId })
-    .returning('*');
+export async function updateOneOrThrow(todoId: string, query: object) {
+  try {
+    return await db('todo')
+      .update({ ...query })
+      .where({ id: todoId })
+      .returning('*');
+  } catch (err) {
+    throw new ApiError('Failed to update record', 500);
+  }
 }
 
-/** @TODO deleteOneOrThrow */
-export async function deleteOne(todoId: string) {
-  return await db('todo').where({ id: todoId }).delete().returning('*');
+export async function deleteOneOrThrow(todoId: string) {
+  try {
+    return await db('todo').where({ id: todoId }).delete().returning('*');
+  } catch (err) {
+    throw new ApiError('Failed to delete record', 500);
+  }
 }

@@ -1,20 +1,25 @@
-import type { ErrorType } from './types';
+// import type { ErrorType } from './types';
 
 export default class ApiError extends Error {
-  type: ErrorType;
+  // type: ErrorType;
+  statusCode: number;
 
-  constructor(type: ErrorType, msg?: string) {
+  constructor(message: string, statusCode?: number) {
     super();
 
-    this.type = type;
-    this.message = msg || 'An error occurred';
+    this.statusCode = statusCode || 500;
+    this.message = message || 'An error occurred';
   }
 
   public get getMessage() {
     return this.message;
   }
 
-  public get getType() {
-    return this.type;
+  // get getType() {
+  //   return this.type;
+  // }
+
+  get getStatusCode() {
+    return this.statusCode;
   }
 }

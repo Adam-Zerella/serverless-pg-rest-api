@@ -71,7 +71,7 @@ export const todoHandlers: AWS['functions'] = {
   },
 
   deleteTodo: {
-    handler: `src/handlers/todo/handlers.delete`,
+    handler: `src/handlers/todo/handlers.remove`,
     description: 'Delete todo',
     architecture: 'arm64',
     events: [

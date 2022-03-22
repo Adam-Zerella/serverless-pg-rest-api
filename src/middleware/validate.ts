@@ -13,6 +13,20 @@ interface Schemas {
   body?: yup.AnySchema;
 }
 
+async function validateSchema(schema: yup.AnySchema, value: unknown) {
+  try {
+    if (schema) {
+      /** Value will come in as `null`, we need to cast it to an object to keep Yup happy. */
+      return schema.validate(value ?? {}, { stripUnknown: true });
+    }
+
+    return null;
+  } catch ({ message }: unknown) {
+    logger.error({ error: message }, 'Failed to validate schema');
+    throw new ApiError(message, 400);
+  }
+}
+
 /**
  * Validate the request paramaters, body or querystring
  */
@@ -20,26 +34,23 @@ export async function awsValidate<TParam, TBody = null, TQuery = null>(
   event: APIGatewayProxyEvent,
   schemas: Schemas,
 ): Promise<{ query: TQuery; body: TBody; param: TParam }> {
-  const { pathParameters, body: requestBody = {}, queryStringParameters } = event;
-  const { param: paramSchema = yup.object(), body: bodySchema, query: querySchema } = schemas;
+  const { pathParameters, body: requestBody, queryStringParameters } = event;
+  const { param: paramSchema, body: bodySchema, query: querySchema } = schemas;
 
   try {
-    const validatedQuerystring = await querySchema.validate(queryStringParameters ?? {});
-    const validatedBody = await bodySchema.validate(requestBody);
-    const validatedParams = await paramSchema.validate(pathParameters);
+    const validatedQuerystring = await validateSchema(querySchema, queryStringParameters);
+    const validatedBody = await validateSchema(bodySchema, requestBody);
+    const validatedParams = await validateSchema(paramSchema, pathParameters);
 
-    logger.debug({ event }, 'Validated request');
+    logger.debug({ ctx: event }, 'Validated request');
 
     return {
       query: validatedQuerystring,
       body: validatedBody,
       param: validatedParams,
     };
-  } catch (error) {
-    logger.debug({ event }, 'Failed to validate request');
-
-    if (error instanceof yup.ValidationError) {
-      throw new ApiError('BAD_DATA', error.message);
-    }
+  } catch ({ message }: unknown) {
+    logger.error({ error: message, ctx: event }, 'Failed to validate request');
+    throw new ApiError(message, 400);
   }
 }

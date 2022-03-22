@@ -13,9 +13,13 @@ function getLogger(name: string) {
     base: undefined,
     enabled: !isTest,
     serializers: {
-      awsEvent: (awsEvent) => ({
-        ['user-agent']: awsEvent.userAgent,
-        rquid: awsEvent.requestId,
+      ctx: ({ headers, body, requestContext }) => ({
+        ['user-agent']: headers['User-Agent'],
+        rquid: requestContext.requestId,
+        ...(body && { body: JSON.parse(body) }),
+      }),
+      error: ({ message }) => ({
+        message,
       }),
     },
     // ...(!isProd &&

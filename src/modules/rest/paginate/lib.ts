@@ -21,6 +21,9 @@ export function calculatePrevUrl(pageNumber: number, origin: string, path: strin
   return `${origin}${path}?${queryParams}&page=${nextPage}`;
 }
 
+/**
+ * @see https://www.bezkoder.com/node-js-sequelize-pagination-mysql/#Nodejs_Pagination_with_Sequelize_and_MySQL_overview
+ */
 export function paginateData(
   records: object[],
   total: number,

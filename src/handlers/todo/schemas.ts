@@ -7,7 +7,7 @@ export type TodoBody = InferType<typeof create['body']>;
 export type TodoQuery = InferType<typeof findAll['query']>;
 
 export const findAll = {
-  query: object().shape({
+  query: object({
     page: number().min(1).default(1).max(99),
     sort: string()
       .nullable()
@@ -17,28 +17,28 @@ export const findAll = {
 };
 
 export const findById = {
-  param: object().shape({
+  param: object({
     todoId: string().uuid().required(),
   }),
 };
 
 export const create = {
-  body: object().shape({
+  body: object({
     label: string().required(),
   }),
 };
 
 export const update = {
-  param: object().shape({
+  param: object({
     todoId: string().uuid().required(),
   }),
-  body: object().shape({
+  body: object({
     label: string(),
   }),
 };
 
 export const remove = {
-  param: object().shape({
+  param: object({
     todoId: string().uuid().required(),
   }),
 };
