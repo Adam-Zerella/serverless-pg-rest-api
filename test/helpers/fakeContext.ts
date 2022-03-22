@@ -1,22 +1,22 @@
-import { AppContext } from '@module/koa/types';
+// import { AppContext } from '@module/koa/types';
 
-interface FakeRequest {
-  query?: unknown;
-  body?: unknown;
-  params?: unknown;
-}
+// interface FakeRequest {
+//   query?: unknown;
+//   body?: unknown;
+//   params?: unknown;
+// }
 
-/**
- * @TODO Types
- */
-export function createKoaContext(request: FakeRequest) {
-  return {
-    ...request,
-    // state: {
-    //   rquid: 'fake-rquid',
-    //   user: {
-    //     ...state,
-    //   },
-    // },
-  } as unknown as AppContext<any, any, any>;
-}
+// /**
+//  * @TODO Types
+//  */
+// export function createKoaContext(request: FakeRequest) {
+//   return {
+//     ...request,
+//     // state: {
+//     //   rquid: 'fake-rquid',
+//     //   user: {
+//     //     ...state,
+//     //   },
+//     // },
+//   } as unknown as AppContext<any, any, any>;
+// }
