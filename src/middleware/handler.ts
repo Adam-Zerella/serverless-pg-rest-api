@@ -7,6 +7,7 @@ export async function handler(callback: () => Promise<APIGatewayProxyResultV2>) 
   try {
     return await callback();
   } catch (err) {
+    console.log('here');
     return jsonResponse({ error: err.message }, err.statusCode);
   }
 }

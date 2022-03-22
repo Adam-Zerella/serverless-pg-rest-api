@@ -47,44 +47,50 @@ export async function findById(awsEvent: APIGatewayProxyEvent) {
 }
 
 export async function create(awsEvent: APIGatewayProxyEvent) {
-  const { body } = await validate<null, TodoBody>(awsEvent, todoSchemas.create);
+  return handler(async () => {
+    const { body } = await validate<null, TodoBody>(awsEvent, todoSchemas.create);
 
-  const [result] = await insertOneOrThrow({
-    ...body,
+    const [result] = await insertOneOrThrow({
+      ...body,
+    });
+
+    logger.info({ ctx: awsEvent }, `Created record with ID '${result.id}'`);
+
+    return jsonResponse({ data: result });
   });
-
-  logger.info({ ctx: awsEvent }, `Created record with ID '${result.id}'`);
-
-  return jsonResponse({ data: result });
 }
 
 export async function update(awsEvent: APIGatewayProxyEvent) {
-  const { param, body } = await validate<TodoParam, TodoBody>(awsEvent, todoSchemas.update);
-  const { todoId } = param;
+  return handler(async () => {
+    const { param, body } = await validate<TodoParam, TodoBody>(awsEvent, todoSchemas.update);
+    const { todoId } = param;
 
-  const record = await findOneOrThrow(todoId);
-  if (isEmpty(record)) {
-    return jsonResponse({ data: null }, 404);
-  }
+    const record = await findOneOrThrow(todoId);
+    if (isEmpty(record)) {
+      return jsonResponse({ data: null }, 404);
+    }
 
-  logger.info({ ctx: awsEvent }, `Updating record with ID '${todoId}'`);
+    logger.info({ ctx: awsEvent }, `Updating record with ID '${todoId}'`);
 
-  const [result] = await updateOneOrThrow(todoId, {
-    ...body,
+    const [result] = await updateOneOrThrow(todoId, {
+      ...body,
+    });
+
+    return jsonResponse({ data: result });
   });
-
-  return jsonResponse({ data: result });
 }
 
 export async function remove(awsEvent: APIGatewayProxyEvent) {
-  const { param } = await validate<TodoParam>(awsEvent, todoSchemas.remove);
-  const { todoId } = param;
+  return handler(async () => {
+    const { param } = await validate<TodoParam>(awsEvent, todoSchemas.remove);
+    const { todoId } = param;
 
-  await findOneOrThrow(todoId);
+    await findOneOrThrow(todoId);
 
-  logger.info({ ctx: awsEvent }, `Deleting record with ID '${todoId}'`);
+    logger.info({ ctx: awsEvent }, `Deleting record with ID '${todoId}'`);
 
-  const [result] = await deleteOneOrThrow(todoId);
+    const [result] = await deleteOneOrThrow(todoId);
 
-  return jsonResponse({ data: result });
+    return jsonResponse({ data: result });
+  });
 }
