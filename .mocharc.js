@@ -9,6 +9,6 @@ module.exports = {
   extension: ['ts'],
   reporter: 'spec',
   require: ['ts-node/register', 'test/helpers/fakeEnv.ts'],
-  // spec: ['**/__test__/**/*.test.ts'], // the positional arguments!
+  // spec: ['**/__tests__/**/*'], 
   timeout: '2000', // same as "timeout: '2s'"
 };

@@ -1,9 +1,11 @@
-// import todoHandlers from '@route/todo/__test__/handlers.test';
-// import todoRoutes from '@route/todo/__test__/routes.test';
+import './helpers/fakeEnv';
 
-// describe('Suite', function () {
-//   describe('Todo', async function () {
-//     todoHandlers();
-//     todoRoutes();
-//   });
-// });
+import todoPersistence from '@handler/todo/__tests__/persistence.test';
+import todoHandlers from '@handler/todo/__tests__/handlers.test';
+
+describe('Suite', function () {
+  describe('Todo', async function () {
+    todoPersistence();
+    todoHandlers();
+  });
+});

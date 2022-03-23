@@ -15,7 +15,8 @@
     "paths": {
       "@module*": ["src/modules*"],
       "@middleware*": ["src/middleware*"],
-      "@service*": ["src/services*"]
+      "@service*": ["src/services*"],
+      "@handler*": ["src/handlers*"]
     }
   },
   "exclude": ["node_modules/**/*", ".vscode/**/*"],
