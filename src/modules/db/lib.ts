@@ -1,10 +1,15 @@
 import { knex } from 'knex';
+import { attachPaginate } from 'knex-paginate';
+
 import omit from 'ramda/src/omit';
 
 import env from '@module/env';
 import log from '@module/log';
 
 const logger = log.getLogger('DB');
+
+/** Attaches a `.paginate()` function to Knex' query builder */
+attachPaginate();
 
 export default knex({
   client: 'pg',
@@ -14,7 +19,7 @@ export default knex({
   pool: {
     max: 1,
     min: 1,
-    // destroyTimeoutMillis: 60000,
+    destroyTimeoutMillis: 30000,
   },
 
   log: {

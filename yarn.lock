@@ -3277,6 +3277,11 @@ keyv@^4.0.0:
   dependencies:
     json-buffer "3.0.1"
 
+knex-paginate@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/knex-paginate/-/knex-paginate-3.0.0.tgz#ec322dd262d6e9ab7d453b5d2232ef9f9a468e03"
+  integrity sha512-jX6pacyvFtUon1QYp/AqK20zMjAPlrr/7zHrqP2HbRz/qdewDRX5huExXOp3+3+501VVYEwxlg84eB3TVzYTEw==
+
 knex@^0.95.11:
   version "0.95.15"
   resolved "https://registry.yarnpkg.com/knex/-/knex-0.95.15.tgz#39d7e7110a6e2ad7de5d673d2dea94143015e0e7"
