@@ -1,8 +1,8 @@
 {
-  "name": "contango-sls",
+  "name": "{{TITLE}}",
   "version": "0.1.0",
   "private": true,
-  "description": "Node.js REST API scaffold with sensible defaults and features for a FaaS environment.",
+  "description": "{{DESCRIPTION}}",
   "scripts": {
     "test": "mocha",
     "dev": "serverless offline --stage offline",
@@ -22,7 +22,6 @@
     "node": "~16"
   },
   "author": "Adam Zerella <hi@azerel.la> (https://azerel.la)",
-  "license": "MIT",
   "dependencies": {
     "knex": "^0.95.11",
     "knex-paginate": "^3.0.0",

@@ -1,6 +1,6 @@
-# CONTANGO SERVERLESS
+# {{TITLE}}
 
-> Node.js REST API scaffold with sensible defaults and features for a FaaS environment. 🦴
+> {{DESCRIPTION}} 🦴
 
 This RESTful API is built with the [Serverless framework](https://www.serverless.com/) along with Aurora Serverless [Postgres](https://www.postgresql.org/) as our DB.
 
