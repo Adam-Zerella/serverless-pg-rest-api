@@ -17,7 +17,6 @@ const serverlessConfiguration: AWS = {
       exclude: ['aws-sdk'],
       external: ['knex', 'pg'],
       target: 'node14',
-      // define: { 'require.resolve': undefined },
       platform: 'node',
     },
 
@@ -42,7 +41,7 @@ const serverlessConfiguration: AWS = {
     'serverless-dotenv-plugin',
     'serverless-esbuild',
     'serverless-offline',
-    'serverless-domain-manager',
+    // 'serverless-domain-manager',
     // 'serverless-secrets',
   ],
 
@@ -50,7 +49,6 @@ const serverlessConfiguration: AWS = {
     name: 'aws',
     runtime: 'nodejs14.x',
     region: 'ap-southeast-2', // Sydney
-    role: 'arn:aws:iam::453470842717:role/IamRoleLambdaExecution',
     logRetentionInDays: 14,
     timeout: 30,
     lambdaHashingVersion: '20201221',

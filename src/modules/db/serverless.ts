@@ -1,3 +1,5 @@
+import { DATABASE_NAME } from './constants';
+
 import type { AWS } from '@serverless/typescript';
 
 export const dbResources: AWS['resources']['Resources'] = {
@@ -31,7 +33,7 @@ export const dbResources: AWS['resources']['Resources'] = {
       MasterUserPassword: {
         'Fn::Sub': '{{resolve:secretsmanager:${RDSClusterRotationalSecrets}::password}}',
       },
-      DatabaseName: '${self:service}',
+      DatabaseName: DATABASE_NAME,
       ScalingConfiguration: {
         AutoPause: true,
         MinCapacity: 2, // '2C | 4GB'
