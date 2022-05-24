@@ -6,7 +6,7 @@ This RESTful API is built with the [Serverless framework](https://www.serverless
 
 ## Usage 📖
 
-Getting started with this repo...
+Let's do this...
 
 ## Local development
 
@@ -24,13 +24,15 @@ As we rely on [Postgres](https://www.postgresql.org/), we need to create, migrat
 
 A popular solution is to run an instance via [Docker](https://www.docker.com/)
 
+> NOTE: AWS Aurora Serverless Postgres currently only supports Postgres 10.14.
+
 ```sh
 docker run \
     -e POSTGRES_PASSWORD=postgres \
     -e POSTGRES_DB=todos \
     -e LANG='en_US.UTF-8' \
     -p 5432:5432 \
-    -d postgres
+    -d postgres:10
 ```
 
 From here, you can connect using a popular client such as [Postbird](https://www.electronjs.org/apps/postbird) or [pgAdmin4](https://www.pgadmin.org/download/) to visualise and interact with the data.
@@ -41,6 +43,12 @@ To create the database tables and seed it with some initial data:
 
 ```sh
 yarn db
+```
+
+For running migrations in production, **only use**: 
+
+```sh
+yarn db:migrate
 ```
 
 #### Hot reloading 🔫
@@ -58,7 +66,8 @@ environment you're deploying to.
 
 ```sh
 yarn deploy \
-    --stage prod
+    --stage <STAGE> \
+    --aws-profile <PROFILE>
 ```
  
 ## Documentation 📚
