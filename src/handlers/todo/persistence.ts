@@ -1,4 +1,4 @@
-import ApiError from '@module/error/lib';
+import ApiError from '@module/error';
 import db from '@module/db/lib';
 import log from '@module/log';
 import { MAX_RECORD_LIMIT } from '@module/db/constants';

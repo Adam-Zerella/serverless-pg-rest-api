@@ -1,7 +1,7 @@
 import { AnyObjectSchema, ValidationError } from 'yup';
 
 import log from '@module/log';
-import ApiError from '@module/error/lib';
+import ApiError from '@module/error';
 
 const logger = log.getLogger('ValidateMiddleware');
 

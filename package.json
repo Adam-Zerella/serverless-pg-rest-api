@@ -18,13 +18,6 @@
     "db:seed": "knex seed:run",
     "deploy": "sls deploy"
   },
-  "keywords": [
-    "contango",
-    "functional",
-    "scaffold",
-    "framework",
-    "serverless"
-  ],
   "engines": {
     "node": "~16"
   },

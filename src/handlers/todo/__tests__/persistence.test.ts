@@ -10,7 +10,7 @@ import {
 } from '../persistence';
 
 import db from '@module/db/lib';
-import ApiError from '@module/error/lib';
+import ApiError from '@module/error';
 
 import type { TodoQuery } from '../schemas';
 
