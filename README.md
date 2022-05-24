@@ -32,7 +32,8 @@ docker run \
     -e POSTGRES_DB=todos \
     -e LANG='en_US.UTF-8' \
     -p 5432:5432 \
-    -d postgres:10
+    -d \
+    postgres:10
 ```
 
 From here, you can connect using a popular client such as [Postbird](https://www.electronjs.org/apps/postbird) or [pgAdmin4](https://www.pgadmin.org/download/) to visualise and interact with the data.

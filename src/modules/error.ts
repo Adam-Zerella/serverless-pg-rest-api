@@ -1,7 +1,4 @@
-// import type { ErrorType } from './types';
-
 export default class ApiError extends Error {
-  // type: ErrorType;
   statusCode: number;
 
   constructor(message: string, statusCode?: number) {
@@ -15,11 +12,7 @@ export default class ApiError extends Error {
     return this.message;
   }
 
-  // get getType() {
-  //   return this.type;
-  // }
-
-  get getStatusCode() {
+  public get getStatusCode() {
     return this.statusCode;
   }
 }
